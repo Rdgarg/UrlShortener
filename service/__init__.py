@@ -3,6 +3,7 @@ from markupsafe import escape
 from flask_mysqldb import MySQL
 from service.UrlShortener import UrlShortener
 from service.UrlDao import UrlDao
+from prometheus_flask_exporter import PrometheusMetrics
 
 app = Flask(__name__)
 
@@ -12,6 +13,7 @@ app.config['MYSQL_PASSWORD'] = ''
 app.config['MYSQL_DB'] = 'project'
 
 mysql = MySQL(app)
+metrics = PrometheusMetrics(app)
 
 urlDao = UrlDao(mysql)
 urlShortener = UrlShortener(urlDao)

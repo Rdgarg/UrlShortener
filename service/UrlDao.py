@@ -9,16 +9,12 @@ class UrlDao:
         print(rc)
         x = cursor.fetchall()
         print(x)
-        # data = result.fetchone()
         cursor.close()
 
-        return str(result)
-        # if data is None:
-        #     print("mapping doesn't exist")
-        #     return None
-        # else:
-        #     print(data)
-        #     return data
+        if len(x) == 0:
+            return None
+
+        return x[0][1]
 
     def putUrl(self, shorten_url, actual_url):
         cursor = self.mysql.connection.cursor()
