@@ -5,8 +5,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e39736de-8d7b-433d-9040-296e18d2f021" name="Changes" comment="Setup database connection">
+      <change afterPath="$PROJECT_DIR$/deployment/app-deployment.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/deployment/nginx-deployment.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/deployment/prometheus-deployment.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ingress/example-ingress.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pods/flask-pod.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pods/ubuntu-pod.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/prometheus/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/prometheus/prometheus.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/longurls.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/shorturls.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/shorturltoLongUrlMap.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scripts/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scripts/UrlDao.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scripts/UrlShortener.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scripts/app.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scripts/loadtest.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scripts/requirements.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/service/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/service/requirements.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/service/UrlDao.py" beforeDir="false" afterPath="$PROJECT_DIR$/service/UrlDao.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/service/UrlShortener.py" beforeDir="false" afterPath="$PROJECT_DIR$/service/UrlShortener.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/service/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/service/__init__.py" afterDir="false" />
     </list>
@@ -37,6 +55,22 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file:///Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/random.py" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/.venv/lib/python3.12/site-packages/prometheus_client/metrics.py" root0="SKIP_INSPECTION" />
+  </component>
+  <component name="KubernetesApiProvider">{
+  &quot;contexts&quot;: [
+    {
+      &quot;name&quot;: &quot;minikube&quot;,
+      &quot;originalNamespace&quot;: &quot;default&quot;
+    }
+  ],
+  &quot;isMigrated&quot;: true
+}</component>
+  <component name="KubernetesSettings">
+    <option name="contextName" value="minikube" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 7
 }</component>
@@ -48,9 +82,12 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;Flask server.Flask (service/__init__.py).executor&quot;: &quot;Debug&quot;,
+    &quot;Python.loadtest.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/ronakgarg/RonakProjects/UrlShortener/flaskProject/scripts&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -59,7 +96,51 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
-  <component name="RunManager">
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/scripts" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Flask server.Flask (service/__init__.py)">
+    <configuration name="loadtest" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="flaskProject" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/scripts" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/scripts/loadtest.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Flask (service/__init__.py)" type="Python.FlaskServer" temporary="true" nameIsGenerated="true">
+      <module name="flaskProject" />
+      <option name="target" value="$PROJECT_DIR$/service/__init__.py" />
+      <option name="targetType" value="PATH" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="launchJavascriptDebuger" value="false" />
+      <method v="2" />
+    </configuration>
     <configuration name="flaskProject" type="Python.FlaskServer">
       <module name="flaskProject" />
       <option name="target" value="$PROJECT_DIR$/app.py" />
@@ -76,6 +157,18 @@
       <option name="launchJavascriptDebuger" value="false" />
       <method v="2" />
     </configuration>
+    <configuration default="true" type="docker-deploy" factoryName="dockerfile" temporary="true">
+      <deployment type="dockerfile">
+        <settings />
+      </deployment>
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Flask server.Flask (service/__init__.py)" />
+        <item itemvalue="Python.loadtest" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -95,6 +188,17 @@
       <workItem from="1710754704699" duration="710000" />
       <workItem from="1710777836381" duration="4234000" />
       <workItem from="1710861739035" duration="15009000" />
+      <workItem from="1711212670382" duration="4218000" />
+      <workItem from="1711454329593" duration="18399000" />
+      <workItem from="1711784988247" duration="8404000" />
+      <workItem from="1712164912711" duration="3789000" />
+      <workItem from="1712808088665" duration="329000" />
+      <workItem from="1712811099160" duration="1893000" />
+      <workItem from="1713091883448" duration="5842000" />
+      <workItem from="1713890577273" duration="1403000" />
+      <workItem from="1714212113609" duration="2012000" />
+      <workItem from="1714295913098" duration="8909000" />
+      <workItem from="1715509716552" duration="5859000" />
     </task>
     <task id="LOCAL-00001" summary="Basic outline">
       <option name="closed" value="true" />
@@ -145,5 +249,106 @@
     <MESSAGE value="Basic outline" />
     <MESSAGE value="Setup database connection" />
     <option name="LAST_COMMIT_MESSAGE" value="Setup database connection" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/.venv/lib/python3.12/site-packages/prometheus_client/metrics.py</url>
+          <line>650</line>
+          <option name="timeStamp" value="12" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/.venv/lib/python3.12/site-packages/prometheus_client/metrics.py</url>
+          <line>652</line>
+          <option name="timeStamp" value="13" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/.venv/lib/python3.12/site-packages/prometheus_flask_exporter/__init__.py</url>
+          <line>580</line>
+          <option name="timeStamp" value="18" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <condition expression="buckets == [0.005, 0.01, 0.025, 0.05, 0.075, 0.1, 0.25, 0.5, 0.75, 1.0, 2.5, 5.0, 7.5, 10.0, inf]" language="Python" />
+          <url>file://$PROJECT_DIR$/.venv/lib/python3.12/site-packages/prometheus_client/metrics.py</url>
+          <line>623</line>
+          <option name="timeStamp" value="19" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/.venv/lib/python3.12/site-packages/prometheus_flask_exporter/__init__.py</url>
+          <line>676</line>
+          <option name="timeStamp" value="20" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/.venv/lib/python3.12/site-packages/prometheus_client/metrics.py</url>
+          <line>585</line>
+          <option name="timeStamp" value="21" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/.venv/lib/python3.12/site-packages/prometheus_client/metrics.py</url>
+          <line>587</line>
+          <option name="timeStamp" value="23" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/.venv/lib/python3.12/site-packages/prometheus_client/metrics.py</url>
+          <line>600</line>
+          <option name="timeStamp" value="24" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/.venv/lib/python3.12/site-packages/prometheus_client/metrics.py</url>
+          <line>601</line>
+          <option name="timeStamp" value="25" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/service/__init__.py</url>
+          <line>22</line>
+          <option name="timeStamp" value="27" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/service/__init__.py</url>
+          <line>34</line>
+          <option name="timeStamp" value="28" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/service/__init__.py</url>
+          <line>35</line>
+          <option name="timeStamp" value="29" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/.venv/lib/python3.12/site-packages/prometheus_flask_exporter/__init__.py</url>
+          <line>567</line>
+          <option name="timeStamp" value="30" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/.venv/lib/python3.12/site-packages/prometheus_flask_exporter/__init__.py</url>
+          <line>685</line>
+          <option name="timeStamp" value="31" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/.venv/lib/python3.12/site-packages/prometheus_flask_exporter/__init__.py</url>
+          <line>694</line>
+          <option name="timeStamp" value="32" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/.venv/lib/python3.12/site-packages/prometheus_flask_exporter/__init__.py</url>
+          <line>691</line>
+          <option name="timeStamp" value="33" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/.venv/lib/python3.12/site-packages/prometheus_flask_exporter/__init__.py</url>
+          <line>681</line>
+          <option name="timeStamp" value="34" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/service/__init__.py</url>
+          <line>1</line>
+          <option name="timeStamp" value="35" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/flaskProject$loadtest.coverage" NAME="loadtest Coverage Results" MODIFIED="1711467488160" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
+    <SUITE FILE_PATH="coverage/flaskProject$Flask__service___init___py_.coverage" NAME="Flask (service/__init__.py) Coverage Results" MODIFIED="1711530617791" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
   </component>
 </project>

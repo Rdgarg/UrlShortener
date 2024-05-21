@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: urlshortener-deployment
+  labels:
+    app: urlshortener
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: urlshortener
+  template:
+    metadata:
+      labels:
+        app: urlshortener
+    spec:
+      containers:
+      - name: urlshortener
+        image: demo:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+        env:
+          - name: password
+            valueFrom:
+              secretKeyRef:
+                name: mysql-secret
+                key: password
+          - name: db_name
+            value: learning
+          - name: MYSQL_SERVICE_HOST
+            value: mysql
