@@ -3,3 +3,4 @@ prometheus_flask_exporter==0.23.0
 flask-mysqldb
 validators
 datetime
+redis

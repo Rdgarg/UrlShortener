@@ -4,7 +4,7 @@ from prometheus_flask_exporter import PrometheusMetrics
 from prometheus_client.utils import INF
 from flask_mysqldb import MySQL
 import os
-import validators
+from redis import Redis
 
 # from scripts.UrlDao import UrlDao
 # from scripts.UrlShortener import UrlShortener
@@ -12,6 +12,7 @@ from UrlDao import UrlDao
 from UrlShortener import UrlShortener
 
 app = Flask(__name__)
+redis = Redis(host='redis', port=6379)
 
 mysql = MySQL()
 
@@ -51,7 +52,8 @@ urlShortener = UrlShortener(urlDao)
 
 @app.route('/')
 def hello_world():  # put application's code here
-    return 'Hello World!'
+    redis.incr("hits")
+    return 'Hello World! I have been seen {} times.\n'.format(redis.get("hits").decode('utf-8'))
 
 
 @app.route('/index')
