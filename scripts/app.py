@@ -4,6 +4,7 @@ from prometheus_flask_exporter import PrometheusMetrics
 from prometheus_client.utils import INF
 from flask_mysqldb import MySQL
 import os
+import validators
 
 # from scripts.UrlDao import UrlDao
 # from scripts.UrlShortener import UrlShortener
@@ -26,6 +27,13 @@ app.config['MYSQL_PASSWORD'] = os.getenv("password")
 app.config['MYSQL_DB'] = os.getenv("db_name")
 app.config['MYSQL_PORT'] = 3306
 mysql.init_app(app)
+
+# app.config['MYSQL_HOST'] = 'localhost'
+# app.config['MYSQL_USER'] = 'root'
+# app.config['MYSQL_PASSWORD'] = ''
+# app.config['MYSQL_DB'] = 'project'
+# app.config['MYSQL_PORT'] = 3306
+# mysql.init_app(app)
 
 buckets = list(map(lambda x: x * 0.01, (.005, .01, .025, .05, .075, .1, .25, .5, .75, 1.0, 2.5, 5.0, 7.5, 10.0, INF)))
 
