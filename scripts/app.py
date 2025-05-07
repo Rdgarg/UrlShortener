@@ -70,6 +70,10 @@ def actual_url():
     url = request.args.get("url")
     return urlShortener.getActualUrl(url)
 
+@app.route('/stats')
+def stats():
+    return urlShortener.get_stats()
+
 
 if __name__ == '__main__':
     print("starting app scripts")

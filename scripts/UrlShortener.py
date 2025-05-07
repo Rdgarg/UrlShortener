@@ -3,6 +3,7 @@ import random
 import validators
 import hashlib
 import base64
+import datetime
 
 URL_PREFIX = "https://www.shortn.com/"
 
@@ -36,7 +37,7 @@ class UrlShortener:
             print("The shortened URL %s already exists,", shortened_url)
             return self.urlshortener(url)
 
-        self.urlDao.putUrl(url_suffix, url)
+        self.urlDao.putUrl(url_suffix, url,datetime.datetime.now() )
         return shortened_url
 
     def getActualUrl(self, shortened_url):
@@ -47,4 +48,8 @@ class UrlShortener:
         urlinfo = self.urlDao.getUrlInfo(shortened_url[len(URL_PREFIX):])
         if urlinfo is None:
             return "URL not found"
+        self.urlDao.updateUrlStats(shortened_url[len(URL_PREFIX):])
         return urlinfo
+
+    def get_stats(self):
+        return self.urlDao.get_stats()
