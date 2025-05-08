@@ -1,4 +1,3 @@
-import string
 import random
 import validators
 import hashlib
@@ -6,6 +5,13 @@ import base64
 import datetime
 
 URL_PREFIX = "https://www.shortn.com/"
+
+import logging
+from google.cloud import logging as google_cloud_logging
+logging_client = google_cloud_logging.Client()
+logging_client.setup_logging()  # Automatically configures handlers based on the environment
+
+logger = logging.getLogger(__name__)
 
 
 def get_random_url_suffix(url):
@@ -24,17 +30,17 @@ class UrlShortener:
 
     def urlshortener(self, url):
         if not validators.url(url):
-            print("Invalid URL", url)
+            logger.info("Invalid URL", url)
             raise Exception("Invalid URL")
         # time.sleep(random.random())
         url_suffix = get_random_url_suffix(url)
-        print("got url suffix", url_suffix)
+        logger.info("got url suffix", url_suffix)
         # letters = string.ascii_lowercase
         # shortened_url = ''.join(random.choice(letters) for i in range(6))
         shortened_url = URL_PREFIX + url_suffix
 
         if self.urlDao.getUrlInfo(url_suffix) is not None:
-            print("The shortened URL %s already exists,", shortened_url)
+            logger.info("The shortened URL %s already exists,", shortened_url)
             return self.urlshortener(url)
 
         self.urlDao.putUrl(url_suffix, url,datetime.datetime.now() )
@@ -42,7 +48,7 @@ class UrlShortener:
 
     def getActualUrl(self, shortened_url):
         if not shortened_url.startswith(URL_PREFIX):
-            print("Invalid URL", shortened_url)
+            logger.info("Invalid URL", shortened_url)
             raise Exception("Invalid URL")
 
         urlinfo = self.urlDao.getUrlInfo(shortened_url[len(URL_PREFIX):])

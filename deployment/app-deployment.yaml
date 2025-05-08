@@ -16,8 +16,8 @@ spec:
     spec:
       containers:
       - name: urlshortener
-        image: demo:latest
-        imagePullPolicy: IfNotPresent
+        image: us-west2-docker.pkg.dev/urlshortener-459015/ronak-repo/demo:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 80
         env:

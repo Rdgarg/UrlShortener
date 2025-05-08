@@ -4,3 +4,4 @@ flask-mysqldb
 validators
 datetime
 redis
+google-cloud-logging

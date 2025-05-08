@@ -1,10 +1,12 @@
-from flask import Flask, request
+from flask import Flask, request, redirect
 from markupsafe import escape
 from prometheus_flask_exporter import PrometheusMetrics
 from prometheus_client.utils import INF
 from flask_mysqldb import MySQL
 import os
 from redis import Redis
+import logging
+from google.cloud import logging as google_cloud_logging
 
 # from scripts.UrlDao import UrlDao
 # from scripts.UrlShortener import UrlShortener
@@ -49,34 +51,52 @@ print("running some shit")
 urlDao = UrlDao(mysql)
 urlShortener = UrlShortener(urlDao)
 
+logging_client = google_cloud_logging.Client()
+logging_client.setup_logging()  # Automatically configures handlers based on the environment
+
+logger = logging.getLogger(__name__)
+
 
 @app.route('/')
-def hello_world():  # put application's code here
+def hello_world():
+    logger.info("This is home page")# put application's code here
     redis.incr("hits")
     return 'Hello World! I have been seen {} times.\n'.format(redis.get("hits").decode('utf-8'))
 
 
 @app.route('/index')
 def index_page():
+    logger.info("This is index page")
     return 'Index page'
 
 
 @app.route('/shorten_url')
 def shorten_url():
     url = request.args.get("url")
+    logger.info("This is shorten_url request, url is %s", url)
     return urlShortener.urlshortener(url)
 
 
 @app.route('/actual_url')
 def actual_url():
     url = request.args.get("url")
+    logger.info("This is actual_url request, url is %s", url)
     return urlShortener.getActualUrl(url)
 
 @app.route('/stats')
 def stats():
+    logger.info("This is a stats request")
     return urlShortener.get_stats()
 
 
+@app.route('/sendme')
+def sendme():
+    url = request.args.get("url")
+    logger.info("This is a sendme request with url %s", url)
+    actualUrl = urlShortener.getActualUrl(url)
+    return redirect(actualUrl, 302)
+
+
 if __name__ == '__main__':
-    print("starting app scripts")
+    logger.info("starting app scripts")
     app.run()
