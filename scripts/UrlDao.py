@@ -32,7 +32,17 @@ class UrlDao:
 
     def get_stats(self):
         cursor = self.mysql.connection.cursor()
-        result = cursor.execute('''SELECT url, counter from url_stats order by counter desc limit 1000''')
+        result = cursor.execute('''SELECT u.url, u.counter, ur.current_time from url_stats u join Url ur on ur.shorten_url = u.url order by counter desc limit 1000''')
+        rc = cursor.rowcount
+        logger.info(rc)
+        x = cursor.fetchall()
+        logger.info(x)
+        cursor.close()
+        return str(x)
+
+    def get_stats_for_single_url(self, url):
+        cursor = self.mysql.connection.cursor()
+        result = cursor.execute('''SELECT u.url, u.counter, ur.current_time from url_stats u join Url ur on ur.shorten_url = u.url where u.url = %s''', [url])
         rc = cursor.rowcount
         logger.info(rc)
         x = cursor.fetchall()

@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect
+from flask import Flask, request, redirect, jsonify
 from markupsafe import escape
 from prometheus_flask_exporter import PrometheusMetrics
 from prometheus_client.utils import INF
@@ -7,6 +7,7 @@ import os
 from redis import Redis
 import logging
 from google.cloud import logging as google_cloud_logging
+from flask_cors import CORS
 
 # from scripts.UrlDao import UrlDao
 # from scripts.UrlShortener import UrlShortener
@@ -15,6 +16,7 @@ from UrlShortener import UrlShortener
 
 app = Flask(__name__)
 redis = Redis(host='redis', port=6379)
+CORS(app)
 
 mysql = MySQL()
 
@@ -74,27 +76,36 @@ def index_page():
 def shorten_url():
     url = request.args.get("url")
     logger.info("This is shorten_url request, url is %s", url)
-    return urlShortener.urlshortener(url)
+    short_url = urlShortener.urlshortener(url)
+    return jsonify({"short_url": short_url})
 
 
 @app.route('/actual_url')
 def actual_url():
     url = request.args.get("url")
     logger.info("This is actual_url request, url is %s", url)
-    return urlShortener.getActualUrl(url)
+    original_url =  urlShortener.getActualUrl(url)
+    return jsonify({"actual_url": original_url})
 
 @app.route('/stats')
 def stats():
     logger.info("This is a stats request")
-    return urlShortener.get_stats()
+    if request.args.get("url"):
+        url = request.args.get("url")
+        logger.info("This is a stats request with url %s", url)
+        stats_for_url = urlShortener.get_stats_for_single_url(url)
+        return stats_for_url
+    else :
+        logger.info("This is a stats request without url")
+        return urlShortener.get_stats()
 
 
 @app.route('/sendme')
 def sendme():
     url = request.args.get("url")
     logger.info("This is a sendme request with url %s", url)
-    actualUrl = urlShortener.getActualUrl(url)
-    return redirect(actualUrl, 302)
+    original_url = urlShortener.getActualUrl(url)
+    return redirect(original_url, 302)
 
 
 if __name__ == '__main__':

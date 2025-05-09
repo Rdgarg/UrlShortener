@@ -59,3 +59,6 @@ class UrlShortener:
 
     def get_stats(self):
         return self.urlDao.get_stats()
+
+    def get_stats_for_single_url(self, url):
+        return self.urlDao.get_stats_for_single_url(url)

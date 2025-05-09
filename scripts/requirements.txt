@@ -5,3 +5,4 @@ validators
 datetime
 redis
 google-cloud-logging
+flask-cors
