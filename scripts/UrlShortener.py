@@ -1,3 +1,4 @@
+import json
 import random
 import validators
 import hashlib
@@ -6,10 +7,7 @@ import datetime
 
 URL_PREFIX = "https://www.shortn.com/"
 
-import logging
-from google.cloud import logging as google_cloud_logging
-logging_client = google_cloud_logging.Client()
-logging_client.setup_logging()  # Automatically configures handlers based on the environment
+import logging # Automatically configures handlers based on the environment
 
 logger = logging.getLogger(__name__)
 
@@ -28,7 +26,7 @@ class UrlShortener:
 
     url_dict = {}
 
-    def urlshortener(self, url):
+    def urlshortener(self, url, user_id):
         if not validators.url(url):
             logger.info("Invalid URL", url)
             raise Exception("Invalid URL")
@@ -41,9 +39,9 @@ class UrlShortener:
 
         if self.urlDao.getUrlInfo(url_suffix) is not None:
             logger.info("The shortened URL %s already exists,", shortened_url)
-            return self.urlshortener(url)
+            return self.urlshortener(url, user_id)
 
-        self.urlDao.putUrl(url_suffix, url,datetime.datetime.now() )
+        self.urlDao.putUrl(url_suffix, url,datetime.datetime.now(), user_id )
         return shortened_url
 
     def getActualUrl(self, shortened_url):
@@ -58,7 +56,29 @@ class UrlShortener:
         return urlinfo
 
     def get_stats(self):
-        return self.urlDao.get_stats()
+        url_stats =  self.urlDao.get_stats()
+        for stats in url_stats:
+            stats["short_url"] = URL_PREFIX + stats["short_url"]
+
+        return json.dumps(url_stats)
 
     def get_stats_for_single_url(self, url):
-        return self.urlDao.get_stats_for_single_url(url)
+        url_suffix = url[len(URL_PREFIX):]
+        url_stats =  self.urlDao.get_stats_for_single_url(url_suffix)
+        for stats in url_stats:
+            stats["short_url"] = URL_PREFIX + stats["short_url"]
+
+        return json.dumps(url_stats)
+
+    def get_user_info(self, user_id):
+        user_info = self.urlDao.get_user_info(user_id)
+        if user_info is None:
+            logger.info("User not found", user_id)
+            return None
+        return user_info
+
+    def add_user_info(self, user_id, email, name):
+        if self.get_user_info(user_id) is not None:
+            logger.info("User already exists", user_id)
+            return None
+        return self.urlDao.add_user_info(user_id, email, name,datetime.datetime.now())

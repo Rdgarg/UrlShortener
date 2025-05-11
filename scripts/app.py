@@ -1,5 +1,4 @@
 from flask import Flask, request, redirect, jsonify
-from markupsafe import escape
 from prometheus_flask_exporter import PrometheusMetrics
 from prometheus_client.utils import INF
 from flask_mysqldb import MySQL
@@ -8,9 +7,9 @@ from redis import Redis
 import logging
 from google.cloud import logging as google_cloud_logging
 from flask_cors import CORS
+from google.oauth2 import id_token
+from google.auth.transport import requests as grequests
 
-# from scripts.UrlDao import UrlDao
-# from scripts.UrlShortener import UrlShortener
 from UrlDao import UrlDao
 from UrlShortener import UrlShortener
 
@@ -58,6 +57,7 @@ logging_client.setup_logging()  # Automatically configures handlers based on the
 
 logger = logging.getLogger(__name__)
 
+CLIENT_ID = '251182287536-srbj0sbra4rtlh0prd5j7qobgd7u4frs.apps.googleusercontent.com'
 
 @app.route('/')
 def hello_world():
@@ -65,7 +65,26 @@ def hello_world():
     redis.incr("hits")
     return 'Hello World! I have been seen {} times.\n'.format(redis.get("hits").decode('utf-8'))
 
+@app.route('/login', methods=['POST'])
+def login():
+    logger.info("Login request")
+    token = request.json.get('token')
+    try:
+        # Verify the token using Google's library
+        idinfo = id_token.verify_oauth2_token(token, grequests.Request(), CLIENT_ID)
 
+        # ID token is valid. Get user info.
+        user_id = idinfo['sub']
+        email = idinfo.get('email')
+        name = idinfo.get('name')
+        urlShortener.add_user_info(user_id, email, name)
+        redis.set(user_id, "true")
+        # You can now use this info in your app
+        return jsonify({"message": "Login successful", "email": email, "name": name})
+
+    except ValueError:
+        # Invalid token
+        return jsonify({"error": "Invalid token"}), 400
 @app.route('/index')
 def index_page():
     logger.info("This is index page")
@@ -74,14 +93,20 @@ def index_page():
 
 @app.route('/shorten_url')
 def shorten_url():
+    user_id = validate_token(request)
+    if user_id is None:
+        return jsonify({"error": "Unauthorized"}), 401
+
     url = request.args.get("url")
     logger.info("This is shorten_url request, url is %s", url)
-    short_url = urlShortener.urlshortener(url)
+    short_url = urlShortener.urlshortener(url, user_id)
     return jsonify({"short_url": short_url})
 
 
 @app.route('/actual_url')
 def actual_url():
+    if validate_token(request) is None:
+        return jsonify({"error": "Unauthorized"}), 401
     url = request.args.get("url")
     logger.info("This is actual_url request, url is %s", url)
     original_url =  urlShortener.getActualUrl(url)
@@ -89,6 +114,8 @@ def actual_url():
 
 @app.route('/stats')
 def stats():
+    if validate_token(request) is None:
+        return jsonify({"error": "Unauthorized"}), 401
     logger.info("This is a stats request")
     if request.args.get("url"):
         url = request.args.get("url")
@@ -102,10 +129,29 @@ def stats():
 
 @app.route('/sendme')
 def sendme():
+    if validate_token(request) is None:
+        return jsonify({"error": "Unauthorized"}), 401
     url = request.args.get("url")
     logger.info("This is a sendme request with url %s", url)
     original_url = urlShortener.getActualUrl(url)
     return redirect(original_url, 302)
+
+def validate_token(request):
+    auth_header = request.headers.get('Authorization', '')
+    if not auth_header.startswith('Bearer '):
+        return None
+
+    token = auth_header.split(' ')[1]
+    try:
+        idinfo = id_token.verify_oauth2_token(token, grequests.Request(), CLIENT_ID)
+    except ValueError:
+        logger.error("Invalid token")
+        return None
+    user_id = idinfo['sub']
+    if redis.get(user_id) is None:
+        logger.error("User not found in Redis")
+        return None
+    return user_id
 
 
 if __name__ == '__main__':
