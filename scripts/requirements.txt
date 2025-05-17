@@ -6,3 +6,4 @@ datetime
 redis
 google-cloud-logging
 flask-cors
+flask_limiter

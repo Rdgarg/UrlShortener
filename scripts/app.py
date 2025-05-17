@@ -9,6 +9,8 @@ from google.cloud import logging as google_cloud_logging
 from flask_cors import CORS
 from google.oauth2 import id_token
 from google.auth.transport import requests as grequests
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 
 from UrlDao import UrlDao
 from UrlShortener import UrlShortener
@@ -59,6 +61,13 @@ logging_client.setup_logging()  # Automatically configures handlers based on the
 logger = logging.getLogger(__name__)
 
 CLIENT_ID = '251182287536-srbj0sbra4rtlh0prd5j7qobgd7u4frs.apps.googleusercontent.com'
+
+limiter = Limiter(
+    get_remote_address,
+    app=app,
+    default_limits=["200 per day", "50 per hour"],
+    storage_uri="memory://",
+)
 
 @app.route('/')
 def hello_world():
