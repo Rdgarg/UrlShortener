@@ -5,7 +5,7 @@ import hashlib
 import base64
 import datetime
 
-URL_PREFIX = "https://www.shortn.com/"
+URL_PREFIX = "https://my-short-url.com/route/"
 
 import logging # Automatically configures handlers based on the environment
 
@@ -26,7 +26,7 @@ class UrlShortener:
 
     url_dict = {}
 
-    def urlshortener(self, url, user_id):
+    def urlshortener(self, url, user_id, ip):
         if not validators.url(url):
             logger.info("Invalid URL", url)
             raise Exception("Invalid URL")
@@ -39,9 +39,9 @@ class UrlShortener:
 
         if self.urlDao.getUrlInfo(url_suffix) is not None:
             logger.info("The shortened URL %s already exists,", shortened_url)
-            return self.urlshortener(url, user_id)
+            return self.urlshortener(url, user_id, ip)
 
-        self.urlDao.putUrl(url_suffix, url,datetime.datetime.now(), user_id )
+        self.urlDao.putUrl(url_suffix, url,datetime.datetime.now(), user_id, ip )
         return shortened_url
 
     def getActualUrl(self, shortened_url):
@@ -53,6 +53,14 @@ class UrlShortener:
         if urlinfo is None:
             return "URL not found"
         self.urlDao.updateUrlStats(shortened_url[len(URL_PREFIX):])
+        return urlinfo
+
+    def get_actual_url_without_prefix(self, shortened_url):
+
+        urlinfo = self.urlDao.getUrlInfo(shortened_url)
+        if urlinfo is None:
+            return "URL not found"
+        self.urlDao.updateUrlStats(shortened_url)
         return urlinfo
 
     def get_stats(self):
@@ -81,4 +89,4 @@ class UrlShortener:
         if self.get_user_info(user_id) is not None:
             logger.info("User already exists", user_id)
             return None
-        return self.urlDao.add_user_info(user_id, email, name,datetime.datetime.now())
+        return self.urlDao.add_user_info(user_id, email, name, datetime.datetime.now())

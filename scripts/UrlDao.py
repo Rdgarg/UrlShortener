@@ -21,9 +21,9 @@ class UrlDao:
 
         return x[0][1]
 
-    def putUrl(self, shorten_url, actual_url, current_time, user_id):
+    def putUrl(self, shorten_url, actual_url, current_time, user_id, ip):
         cursor = self.mysql.connection.cursor()
-        result = cursor.execute('''INSERT INTO Url VALUES(%s, %s, %s, %s)''', [shorten_url, actual_url, current_time, user_id])
+        result = cursor.execute('''INSERT INTO Url VALUES(%s, %s, %s, %s, %s)''', [shorten_url, actual_url, current_time, user_id, ip])
         self.mysql.connection.commit()
         cursor.close()
         return str(result)
@@ -110,7 +110,7 @@ class UrlDao:
 
     def add_user_info(self, user_id, email, name, current_time):
         cursor = self.mysql.connection.cursor()
-        result = cursor.execute('''INSERT INTO users (user_id, email, name, current_time) VALUES (%s, %s, %s)''', [user_id, email, name, current_time])
+        result = cursor.execute('''INSERT INTO users (user_id, email, name, created_on) VALUES (%s, %s, %s, %s)''', [user_id, email, name, current_time])
         self.mysql.connection.commit()
         cursor.close()
         return str(result)

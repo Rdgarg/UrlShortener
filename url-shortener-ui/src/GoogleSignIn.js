@@ -9,7 +9,7 @@ function GoogleSignIn() {
     // Define the callback function first
     const handleCredentialResponse = (response) => {
       console.log("Encoded JWT ID token: " + response.credential);
-      fetch('http://34.57.93.16/login', {
+      fetch('https://api.my-short-url.com/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -12,6 +12,7 @@ from google.auth.transport import requests as grequests
 
 from UrlDao import UrlDao
 from UrlShortener import UrlShortener
+from IpExtractor import extract_ip
 
 app = Flask(__name__)
 redis = Redis(host='redis', port=6379)
@@ -90,23 +91,23 @@ def index_page():
     logger.info("This is index page")
     return 'Index page'
 
-
 @app.route('/shorten_url')
 def shorten_url():
     user_id = validate_token(request)
     if user_id is None:
-        return jsonify({"error": "Unauthorized"}), 401
+        logger.info('user not logged in')
 
     url = request.args.get("url")
+    ip = extract_ip(request)
     logger.info("This is shorten_url request, url is %s", url)
-    short_url = urlShortener.urlshortener(url, user_id)
+    short_url = urlShortener.urlshortener(url, user_id, ip)
     return jsonify({"short_url": short_url})
 
 
 @app.route('/actual_url')
 def actual_url():
-    if validate_token(request) is None:
-        return jsonify({"error": "Unauthorized"}), 401
+    # if validate_token(request) is None:
+    #     return jsonify({"error": "Unauthorized"}), 401
     url = request.args.get("url")
     logger.info("This is actual_url request, url is %s", url)
     original_url =  urlShortener.getActualUrl(url)
@@ -114,8 +115,8 @@ def actual_url():
 
 @app.route('/stats')
 def stats():
-    if validate_token(request) is None:
-        return jsonify({"error": "Unauthorized"}), 401
+    # if validate_token(request) is None:
+    #     return jsonify({"error": "Unauthorized"}), 401
     logger.info("This is a stats request")
     if request.args.get("url"):
         url = request.args.get("url")
@@ -129,8 +130,8 @@ def stats():
 
 @app.route('/sendme')
 def sendme():
-    if validate_token(request) is None:
-        return jsonify({"error": "Unauthorized"}), 401
+    # if validate_token(request) is None:
+    #     return jsonify({"error": "Unauthorized"}), 401
     url = request.args.get("url")
     logger.info("This is a sendme request with url %s", url)
     original_url = urlShortener.getActualUrl(url)
@@ -153,6 +154,14 @@ def validate_token(request):
         return None
     return user_id
 
+@app.route('/route/<short_url>')
+def redirect_me(short_url):
+    logger.info("This is redirect_me request, url is %s", short_url)
+
+    original_url = urlShortener.get_actual_url_without_prefix(short_url)
+    if original_url == "URL not found":
+        return jsonify({"error": "URL not found"}), 404
+    return redirect(original_url, 302)
 
 if __name__ == '__main__':
     logger.info("starting app scripts")

@@ -23,6 +23,15 @@ spec:
             - containerPort: 6379
               protocol: TCP
       restartPolicy: Always
+      resources:
+        requests:
+          cpu: "50m"
+          memory: "256Mi"
+          storage: "256Mi"
+        limits:
+          cpu: "100m"
+          memory: "512Mi"
+          storage: "512Mi"
 ---
 apiVersion: v1
 kind: Service

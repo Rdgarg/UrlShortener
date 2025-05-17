@@ -22,7 +22,7 @@ function App() {
     try {
       console.log("In app.js")
       console.log(token)
-      const res = await fetch(`http://34.57.93.16/shorten_url?url=${encodeURIComponent(longUrl)}`,{
+      const res = await fetch(`https://api.my-short-url.com/shorten_url?url=${encodeURIComponent(longUrl)}`,{
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -37,7 +37,7 @@ function App() {
 
   const handleRedirect = async () => {
     try {
-      const res = await fetch(`http://34.57.93.16/actual_url?url=${encodeURIComponent(shortInput)}`,{
+      const res = await fetch(`https://api.my-short-url.com/actual_url?url=${encodeURIComponent(shortInput)}`,{
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -45,7 +45,8 @@ function App() {
       });
       const data = await res.json();
       if (data.actual_url) {
-        window.location.href = data.actual_url;
+        // window.location.href = data.actual_url;
+        window.open(data.actual_url);
       } else {
         alert('Short URL not found.');
       }
@@ -56,7 +57,7 @@ function App() {
 
   useEffect(() => {
     if (tab === 'stats') {
-      fetch('http://34.57.93.16/stats', {
+      fetch('https://api.my-short-url.com/stats', {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -127,8 +128,8 @@ function App() {
               <button
                   onClick={async () => {
                     const endpoint = shortInput
-                        ? `http://34.57.93.16/stats?url=${encodeURIComponent(shortInput)}`
-                        : `http://34.57.93.16/stats`;
+                        ? `https://api.my-short-url.com/stats?url=${encodeURIComponent(shortInput)}`
+                        : `https://api.my-short-url.com/stats`;
                     try {
                       const res = await fetch(endpoint, {
                         method: 'GET',
